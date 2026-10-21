@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>诗路盛唐 · 跟着诗人游中国</title>
+  <link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+  <div class="ink-wash" aria-hidden="true"></div>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="title-block">
+        <p class="eyebrow">唐诗游中国</p>
+        <h1>诗路盛唐 · 跟着诗人游中国</h1>
+      </div>
+      <div class="hud" aria-label="游戏状态">
+        <div class="hud-item">
+          <span class="hud-label">总积分</span>
+          <strong id="scoreText">0</strong>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">印章</span>
+          <strong id="stampText">0/15</strong>
+        </div>
+        <button class="reset-btn" id="resetBtn" type="button">重开</button>
+      </div>
+    </header>
+
+    <section class="map-panel" aria-label="唐诗行旅地图">
+      <div class="map-stage">
+        <img class="map-art" src="image_node_13.png?v=5" alt="大唐疆域图">
+        <svg class="china-map" viewBox="0 0 1000 650" role="img" aria-labelledby="mapTitle mapDesc">
+          <title id="mapTitle">唐代诗路中国地图</title>
+          <desc id="mapDesc">简笔中国轮廓，十五个地区节点按通关顺序逐步解锁。</desc>
+          <defs>
+            <filter id="paperBlur">
+              <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="9"></feTurbulence>
+              <feColorMatrix type="saturate" values="0"></feColorMatrix>
+              <feComponentTransfer>
+                <feFuncA type="table" tableValues="0 0.28"></feFuncA>
+              </feComponentTransfer>
+            </filter>
+            <linearGradient id="riverGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#7fa99b"></stop>
+              <stop offset="100%" stop-color="#2f6f73"></stop>
+            </linearGradient>
+          </defs>
+          <rect class="paper-texture" width="1000" height="650" filter="url(#paperBlur)"></rect>
+          <path class="land-shape" d="M142 310 C160 220 222 165 318 158 C386 91 488 88 573 139 C624 110 703 128 744 184 C833 202 877 265 847 338 C902 397 875 477 785 505 C730 579 624 586 545 548 C483 604 380 591 337 522 C251 526 187 479 189 410 C144 389 125 356 142 310 Z"></path>
+          <path class="mountain-line" d="M205 248 C290 228 330 253 405 228 S556 219 633 250 S755 255 817 318"></path>
+          <path class="river-line" d="M226 470 C330 421 412 446 502 430 S651 419 777 371"></path>
+          <g id="routeLayer"></g>
+          <g id="nodeLayer"></g>
+        </svg>
+      </div>
+      <aside class="side-scroll" aria-label="诗人印章册">
+        <div class="scroll-head">
+          <span>诗人印章册</span>
+          <b id="progressText">第一站 长安</b>
+        </div>
+        <div id="stampGrid" class="stamp-grid"></div>
+      </aside>
+    </section>
+
+    <section class="poet-gallery" aria-label="诗人图鉴">
+      <article class="poet-card">
+        <img src="image_node_16.png?v=5" alt="李白画像">
+        <span>李白</span>
+      </article>
+      <article class="poet-card">
+        <img src="image_node_18.png?v=5" alt="王维画像">
+        <span>王维</span>
+      </article>
+      <article class="poet-card">
+        <img src="image_node_20.png?v=5" alt="杜甫画像">
+        <span>杜甫</span>
+      </article>
+      <article class="poet-card">
+        <img src="image_node_19.png?v=5" alt="白居易画像">
+        <span>白居易</span>
+      </article>
+      <article class="poet-card">
+        <img src="804d8b63-a753-4fed-8daf-6e73dd44ceb9.png?v=5" alt="水墨山水背景">
+        <span>山水诗境</span>
+      </article>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="poem-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-ink" aria-hidden="true"></div>
+      <button class="close-btn" id="closeModalBtn" type="button" aria-label="关闭">×</button>
+      <div id="quizView">
+        <div class="modal-topline">
+          <span id="regionName">长安</span>
+          <span id="questionCount">1/5</span>
+        </div>
+        <h2 id="modalTitle">诗题</h2>
+        <p class="intro" id="introText"></p>
+        <div class="poem-area">
+          <figure class="poet-portrait">
+            <img id="modalPoetImage" src="image_node_16.png?v=5" alt="李白画像">
+            <figcaption class="poet-seal" id="poetSeal">李白</figcaption>
+          </figure>
+          <p class="upper-line" id="upperLine"></p>
+        </div>
+        <div class="recitation-panel" aria-live="polite">
+          <button class="voice-btn" id="reciteBtn" type="button">温柔女声朗读</button>
+          <span class="voice-status" id="voiceStatus">请先听朗读，听完后开始答题。</span>
+        </div>
+        <div class="option-grid" id="optionGrid"></div>
+        <p class="feedback" id="feedbackText" aria-live="polite"></p>
+      </div>
+      <div id="resultView" class="result-view" hidden>
+        <div class="stamp-burst" id="resultStamp">通关</div>
+        <h2 id="resultTitle">本站结算</h2>
+        <p id="resultSummary"></p>
+        <p id="resultHint"></p>
+        <button class="primary-btn" id="backMapBtn" type="button">返回地图</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="data.js?v=6"></script>
+  <script src="game.js?v=7"></script>
+</body>
+</html>
